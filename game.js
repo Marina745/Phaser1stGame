@@ -1,3 +1,4 @@
+//Налаштовуємо сцену 
 var config = {
     type: Phaser.AUTO,
     width: 800,
@@ -16,53 +17,55 @@ var config = {
     }
 };
 var game = new Phaser.Game(config);
-var platforms;
-var player;
+//Завантажили файли для графікі
 function preload ()
-    {
-        this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    }
-    function create ()
-    {
-        this.add.image(400, 300, 'sky');
+{
+    this.load.image('sky', 'assets/sky.png');
+    this.load.image('ground', 'assets/platform.png');
+    this.load.image('star', 'assets/star.png');
+    this.load.image('bomb', 'assets/bomb.png');
+    this.load.spritesheet('dude', 
+        'assets/dude.png',
+        { frameWidth: 32, frameHeight: 48 }
+    );
+}
+var platforms;
 
-        platforms = this.physics.add.staticGroup();
+function create ()
+{
+    this.add.image(400, 300, 'sky');
+    platforms = this.physics.add.staticGroup();
+    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    platforms.create(600, 400, 'ground');
+    platforms.create(50, 250, 'ground');
+    platforms.create(750, 220, 'ground');
+    //Додаємо гравця
+    player = this.physics.add.sprite(100, 450, 'dude');
 
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+player.setBounce(0.2);
+player.setCollideWorldBounds(true);
 
-        platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
-        platforms.create(750, 220, 'ground');
+this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+});
 
-        player = this.physics.add.sprite(100, 450, 'dude');
+this.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+});
 
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
-
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        player.body.setGravityY(300)
-        this.physics.add.collider(player, platforms);
-    }
-   
+this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+    this.physics.add.collider(player, platforms);
+});
+}
+function update ()
+{
+}

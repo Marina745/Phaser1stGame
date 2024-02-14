@@ -23,6 +23,7 @@ var cursors;
 var score = 0;
 var scoreText;
 var bombs;
+var game;
 
 var game = new Phaser.Game(config);
 
@@ -67,7 +68,7 @@ function create ()
 
     this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
         frameRate: 10,
         repeat: -1
     });
@@ -151,12 +152,11 @@ function collectStar (player, star)
 
     if (stars.countActive(true) === 0)
     {
+        
         stars.children.iterate(function (child) {
 
             child.enableBody(true, child.x, 0, true, true);
-
         });
-
         var bomb = bombs.create(x, 16, 'bomb');
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
